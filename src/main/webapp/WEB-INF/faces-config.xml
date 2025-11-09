@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="https://jakarta.ee/xml/ns/jakartaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+              https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd"
+              version="4.0">
+    
+    <application>
+    </application>
+    
+    <!-- Converters -->
+    <converter>
+        <converter-id>isbnConverter</converter-id>
+        <converter-class>com.library.converter.ISBNConverter</converter-class>
+    </converter>
+    
+    <converter>
+        <converter-id>localDateConverter</converter-id>
+        <converter-class>com.library.converter.DateConverter</converter-class>
+    </converter>
+    
+    <!-- Validators -->
+    <validator>
+        <validator-id>isbnValidator</validator-id>
+        <validator-class>com.library.validator.ISBNValidator</validator-class>
+    </validator>
+    
+    <validator>
+        <validator-id>emailValidator</validator-id>
+        <validator-class>com.library.validator.EmailValidator</validator-class>
+    </validator>
+    
+    <validator>
+        <validator-id>phoneValidator</validator-id>
+        <validator-class>com.library.validator.PhoneValidator</validator-class>
+    </validator>
+    
+    <!-- Navigation Rules -->
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>home</from-outcome>
+            <to-view-id>/home.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>addBook</from-outcome>
+            <to-view-id>/addBook.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>issueBook</from-outcome>
+            <to-view-id>/issueBook.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>returnBook</from-outcome>
+            <to-view-id>/returnBook.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>reports</from-outcome>
+            <to-view-id>/reports.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>signup</from-outcome>
+            <to-view-id>/signup.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+</faces-config>
+

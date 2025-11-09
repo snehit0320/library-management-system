@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Reports - Library Management System</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<body>
+    <f:view>
+        <h:form>
+            <div class="container">
+                <h1>Library Reports</h1>
+                
+                <h:messages globalOnly="false" errorClass="error" infoClass="info" 
+                           warnClass="warn" style="margin: 20px 0;"/>
+                
+                <div class="navigation">
+                    <h:commandButton value="Home" action="#{navigationBean.goToHome}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Add Book" action="#{navigationBean.goToAddBook}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Issue Book" action="#{navigationBean.goToIssueBook}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Return Book" action="#{navigationBean.goToReturnBook}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Reports" action="#{navigationBean.goToReports}" 
+                                     styleClass="nav-button active" immediate="true"/>
+                    <h:panelGroup rendered="#{memberBean.loggedIn}">
+                        <h:commandButton value="Logout (#{memberBean.loggedInMember.memberId})" 
+                                         action="#{memberBean.logout}" 
+                                         styleClass="nav-button logout-button" immediate="true"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{!memberBean.loggedIn}">
+                        <h:commandButton value="🔐 Login / Signup" action="#{navigationBean.goToLogin}" 
+                                         styleClass="nav-button login-button" immediate="true"/>
+                    </h:panelGroup>
+                </div>
+                
+                <div class="content">
+                    <f:event type="preRenderView" listener="#{transactionBean.onPageLoad}"/>
+                    <h:commandButton value="Refresh Reports" 
+                                   action="#{transactionBean.loadReports}" 
+                                   styleClass="submit-button" style="margin-bottom: 20px;"/>
+                    
+                    <h2>Currently Issued Books</h2>
+                    <h:dataTable value="#{transactionBean.issuedBooks}" var="trans" 
+                                styleClass="data-table" headerClass="table-header">
+                        <h:column>
+                            <f:facet name="header">Transaction ID</f:facet>
+                            #{trans.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Book Title</f:facet>
+                            #{trans.book.title}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">ISBN</f:facet>
+                            #{trans.book.isbn}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Member</f:facet>
+                            #{trans.member.fullName} (#{trans.member.memberId})
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Issue Date</f:facet>
+                            #{trans.issueDate}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Due Date</f:facet>
+                            #{trans.dueDate}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Status</f:facet>
+                            <h:panelGroup rendered="#{transactionBean.isOverdue(trans)}">
+                                <span style="color: #dc3545; font-weight: bold;">OVERDUE</span>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{not transactionBean.isOverdue(trans)}">
+                                <span style="color: #28a745;">#{trans.status}</span>
+                            </h:panelGroup>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Late Fee (₹)</f:facet>
+                            <h:panelGroup rendered="#{transactionBean.isOverdue(trans)}">
+                                ₹#{transactionBean.getFineAmount(trans)}
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{not transactionBean.isOverdue(trans)}">
+                                ₹0.0
+                            </h:panelGroup>
+                        </h:column>
+                    </h:dataTable>
+                    
+                    <h2 style="margin-top: 40px;">Overdue Books</h2>
+                    <h:dataTable value="#{transactionBean.overdueBooks}" var="trans" 
+                                styleClass="data-table overdue-table" headerClass="table-header">
+                        <h:column>
+                            <f:facet name="header">Transaction ID</f:facet>
+                            #{trans.id}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Book Title</f:facet>
+                            #{trans.book.title}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">ISBN</f:facet>
+                            #{trans.book.isbn}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Member</f:facet>
+                            #{trans.member.fullName} (#{trans.member.memberId})
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Issue Date</f:facet>
+                            #{trans.issueDate}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Due Date</f:facet>
+                            #{trans.dueDate}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Days Overdue</f:facet>
+                            <h:panelGroup rendered="#{transactionBean.isOverdue(trans)}">
+                                #{transactionBean.getDaysOverdue(trans)}
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{not transactionBean.isOverdue(trans)}">
+                                0
+                            </h:panelGroup>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Late Fee (₹)</f:facet>
+                            ₹#{transactionBean.getFineAmount(trans)}
+                        </h:column>
+                    </h:dataTable>
+                </div>
+            </div>
+        </h:form>
+    </f:view>
+</body>
+</html>
+

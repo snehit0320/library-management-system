@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Issue Book - Library Management System</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<body>
+    <f:view>
+        <h:form>
+            <div class="container">
+                <h1>Issue Book</h1>
+                
+                <h:messages globalOnly="false" errorClass="error" infoClass="info" 
+                           warnClass="warn" style="margin: 20px 0;"/>
+                
+                <div class="navigation">
+                    <h:commandButton value="Home" action="#{navigationBean.goToHome}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Add Book" action="#{navigationBean.goToAddBook}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Issue Book" action="#{navigationBean.goToIssueBook}" 
+                                     styleClass="nav-button active" immediate="true"/>
+                    <h:commandButton value="Return Book" action="#{navigationBean.goToReturnBook}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Reports" action="#{navigationBean.goToReports}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:panelGroup rendered="#{memberBean.loggedIn}">
+                        <h:commandButton value="Logout (#{memberBean.loggedInMember.memberId})" 
+                                         action="#{memberBean.logout}" 
+                                         styleClass="nav-button logout-button" immediate="true"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{!memberBean.loggedIn}">
+                        <h:commandButton value="🔐 Login / Signup" action="#{navigationBean.goToLogin}" 
+                                         styleClass="nav-button login-button" immediate="true"/>
+                    </h:panelGroup>
+                </div>
+                
+                <div class="content">
+                    <h:panelGroup rendered="#{!memberBean.loggedIn}">
+                        <div style="padding: 20px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 5px; margin-bottom: 20px;">
+                            <p><strong>Please login first to issue books.</strong></p>
+                            <h:commandButton value="Go to Login" action="#{navigationBean.goToLogin}" 
+                                           styleClass="submit-button" immediate="true"/>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{memberBean.loggedIn}">
+                        <f:event type="preRenderView" listener="#{bookBean.onPageLoad}"/>
+                        <f:event type="preRenderView" listener="#{transactionBean.setLoggedInMemberId}"/>
+                        <div class="form-container">
+                            <div class="member-info-banner">
+                                <p>
+                                    <strong>Issuing book for:</strong> #{memberBean.loggedInMember.fullName} (ID: #{memberBean.loggedInMember.memberId})
+                                </p>
+                            </div>
+                            <div class="form-fields-left">
+                                <div class="form-field-group">
+                                    <h:outputLabel for="book" value="Select Book: *"/>
+                                    <h:selectOneMenu id="book" value="#{transactionBean.selectedBookId}" 
+                                                    required="true" requiredMessage="Please select a book"
+                                                    styleClass="form-input">
+                                        <f:selectItem itemLabel="-- Select Book --" itemValue=""/>
+                                        <f:selectItems value="#{bookBean.books}" var="b" 
+                                                     itemLabel="#{b.title} (ISBN: #{b.isbn}) - Available: #{b.availableCopies}" 
+                                                     itemValue="#{b.id.toString()}"/>
+                                    </h:selectOneMenu>
+                                </div>
+                                
+                                <div class="form-field-group">
+                                    <h:outputLabel for="member" value="Member: *"/>
+                                    <h:inputText id="member" value="#{memberBean.loggedInMember.memberId}" 
+                                                disabled="true" styleClass="form-input disabled-field"/>
+                                    <h:inputHidden value="#{transactionBean.selectedMemberId}"/>
+                                </div>
+                            
+                                <div class="form-field-group">
+                                    <h:outputLabel for="issueDate" value="Issue Date (yyyy-MM-dd): *"/>
+                                    <h:inputText id="issueDate" value="#{transactionBean.issueDate}" 
+                                                required="true" requiredMessage="Issue date is required"
+                                                styleClass="form-input">
+                                        <f:converter converterId="localDateConverter"/>
+                                    </h:inputText>
+                                </div>
+                                
+                                <div class="form-field-group">
+                                    <h:outputLabel for="dueDate" value="Due Date (yyyy-MM-dd): *"/>
+                                    <h:inputText id="dueDate" value="#{transactionBean.dueDate}" 
+                                                required="true" requiredMessage="Due date is required"
+                                                styleClass="form-input">
+                                        <f:converter converterId="localDateConverter"/>
+                                    </h:inputText>
+                                </div>
+                                
+                                <div class="form-field-group">
+                                    <h:commandButton value="Issue Book" action="#{transactionBean.issueBook}" 
+                                                   styleClass="submit-button"
+                                                   actionListener="#{transactionEventListener.handleBorrowAction}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </h:form>
+    </f:view>
+</body>
+</html>
+

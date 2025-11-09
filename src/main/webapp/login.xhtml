@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Login - Library Management System</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<body>
+    <f:view>
+        <h:form>
+            <div class="container">
+                <h1>Member Login</h1>
+                
+                <h:messages globalOnly="false" errorClass="error" infoClass="info" 
+                           warnClass="warn" style="margin: 20px 0;"/>
+                
+                <div class="navigation">
+                    <h:commandButton value="Home" action="#{navigationBean.goToHome}" 
+                                     styleClass="nav-button" immediate="true"/>
+                    <h:commandButton value="Login" action="#{navigationBean.goToLogin}" 
+                                     styleClass="nav-button active" immediate="true"/>
+                    <h:commandButton value="Sign Up" action="#{navigationBean.goToSignup}" 
+                                     styleClass="nav-button" immediate="true"/>
+                </div>
+                
+                <div class="content">
+                    <div class="form-container" style="max-width: 400px; margin: 0 auto;">
+                        <h:panelGrid columns="2" styleClass="form-grid">
+                            <h:outputLabel for="memberId" value="Member ID: *"/>
+                            <h:inputText id="memberId" value="#{memberBean.loginMemberId}" 
+                                        required="true" requiredMessage="Member ID is required"
+                                        placeholder="Enter your Member ID"/>
+                            
+                            <h:panelGroup/>
+                            <h:commandButton value="Login" action="#{memberBean.login}" 
+                                           styleClass="submit-button"/>
+                        </h:panelGrid>
+                        
+                        <div style="margin-top: 20px; text-align: center;">
+                            <p>Don't have an account?</p>
+                            <h:commandButton value="Go to Sign Up" action="#{navigationBean.goToSignup}" 
+                                           styleClass="nav-button" immediate="true"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </f:view>
+</body>
+</html>
+

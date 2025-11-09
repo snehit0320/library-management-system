@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Home - Library Management System</title>
+    <h:outputStylesheet library="css" name="style.css"/>
+</h:head>
+<body>
+    <f:view>
+        <div class="container">
+            <h1>Library Management System - Home</h1>
+            
+            <h:messages globalOnly="false" errorClass="error" infoClass="info" 
+                       warnClass="warn" style="margin: 20px 0;"/>
+            
+            <div class="navigation">
+                <h:button value="Home" outcome="home" 
+                         styleClass="nav-button active"/>
+                <h:button value="Add Book" outcome="addBook" 
+                         styleClass="nav-button"/>
+                <h:button value="Issue Book" outcome="issueBook" 
+                         styleClass="nav-button"/>
+                <h:button value="Return Book" outcome="returnBook" 
+                         styleClass="nav-button"/>
+                <h:button value="Reports" outcome="reports" 
+                         styleClass="nav-button"/>
+                <h:panelGroup rendered="#{memberBean.loggedIn}">
+                    <h:form style="display: inline;">
+                        <h:commandButton value="Logout (#{memberBean.loggedInMember.memberId})" 
+                                         action="#{memberBean.logout}" 
+                                         styleClass="nav-button logout-button" immediate="true"/>
+                    </h:form>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{!memberBean.loggedIn}">
+                    <h:button value="🔐 Login / Signup" outcome="login" 
+                             styleClass="nav-button login-button"/>
+                </h:panelGroup>
+            </div>
+            
+            <div class="content">
+                    <f:event type="preRenderView" listener="#{bookBean.onPageLoad}"/>
+                    <f:event type="preRenderView" listener="#{memberBean.onPageLoad}"/>
+                    
+                    <div class="welcome-section">
+                        <h2>Welcome to Library Management System</h2>
+                        <h:panelGroup rendered="#{memberBean.loggedIn}">
+                            <p style="font-size: 18px; color: #333; margin: 15px 0;">
+                                Hello, <strong style="color: #667eea; font-size: 20px;">#{memberBean.loggedInMember.fullName}</strong>! 
+                                <br/>Member ID: <strong>#{memberBean.loggedInMember.memberId}</strong>
+                            </p>
+                            <p style="color: #555;">You can now browse books, issue books, and manage your library transactions.</p>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{!memberBean.loggedIn}">
+                            <p style="font-size: 18px; color: #333; margin: 15px 0;">
+                                Please <strong style="color: #667eea;">Login</strong> or <strong style="color: #667eea;">Sign Up</strong> to access all library services.
+                            </p>
+                            <p style="color: #555;">Create an account to start borrowing books and managing your library activities.</p>
+                        </h:panelGroup>
+                    </div>
+                    
+                    <h3>Quick Statistics</h3>
+                    <div class="stats">
+                        <div class="stat-box">
+                            <h4>Total Books</h4>
+                            <p>#{empty bookBean.books ? 0 : bookBean.books.size()}</p>
+                        </div>
+                        <div class="stat-box" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                            <h4>Total Members</h4>
+                            <p>#{empty memberBean.members ? 0 : memberBean.members.size()}</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Library Features</h3>
+                    <div class="feature-cards">
+                        <div class="feature-card">
+                            <h4>📚 Book Management</h4>
+                            <p>Add new books to the library collection. Manage book details including ISBN, title, author, and availability.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📖 Issue Books</h4>
+                            <p>Borrow books from the library. Select from available books and get them issued to your account.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>↩️ Return Books</h4>
+                            <p>Return borrowed books on time. View your issued books and return them when done reading.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>📊 Reports &amp; Analytics</h4>
+                            <p>View comprehensive reports on issued books, overdue items, and library statistics.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>👤 Member Account</h4>
+                            <p>Create your member account, login to access services, and manage your library activities.</p>
+                        </div>
+                        <div class="feature-card">
+                            <h4>🔍 Easy Search</h4>
+                            <p>Quickly find books by title, author, or ISBN. Check availability and book details instantly.</p>
+                        </div>
+                    </div>
+                    
+                    <h:panelGroup rendered="#{memberBean.loggedIn}">
+                        <h3>Your Recent Activity</h3>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                            <p style="color: #666; margin: 0;">
+                                <strong>Logged in as:</strong> #{memberBean.loggedInMember.fullName} (#{memberBean.loggedInMember.memberId})<br/>
+                                <strong>Email:</strong> #{memberBean.loggedInMember.email}<br/>
+                                <strong>Phone:</strong> #{memberBean.loggedInMember.phone}
+                            </p>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
+        </f:view>
+    </body>
+</html>
+
