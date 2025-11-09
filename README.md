@@ -232,5 +232,5 @@ This project is created for educational purposes.
 
 ## Author
 
-Library Management System - Java DA3 Project
+Snehit Ram Kumar Y 
 
