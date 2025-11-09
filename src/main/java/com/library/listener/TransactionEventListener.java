@@ -25,10 +25,7 @@ public class TransactionEventListener implements Serializable {
     private TransactionDAO transactionDAO = new TransactionDAO();
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     
-    /**
-     * Handles actions when a book is borrowed/issued
-     * Performs logging, validation, and audit trail creation
-     */
+
     public void handleBorrowAction(ActionEvent event) {
         try {
             // Get transaction bean from EL context
@@ -76,10 +73,7 @@ public class TransactionEventListener implements Serializable {
         }
     }
     
-    /**
-     * Handles actions when a book is returned
-     * Performs logging, fine calculation, and audit trail creation
-     */
+
     public void handleReturnAction(ActionEvent event) {
         try {
             // Get transaction bean from EL context
