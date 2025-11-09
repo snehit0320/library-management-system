@@ -1,4 +1,14 @@
 target/
+*.zip
+*.war
+*.class
+.DS_Store
+.idea/
+*.iml
+*.log
+*.bak
+*.swp
+*~
 *.class
 *.jar
 *.war
